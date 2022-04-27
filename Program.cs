@@ -83,7 +83,6 @@ namespace OOP4
 
             return isContinueCycle;
         }
-
     }
 
     class Menu
