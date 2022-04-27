@@ -40,6 +40,7 @@ namespace OOP4
                         Game game = new Game(deckUser);
                         game.ShowCards();
 
+
                         break;
                     default:
 
@@ -89,7 +90,7 @@ namespace OOP4
         public void OutputCardsPlayer(Queue<string> cardsPlaer)
         {
 
-            Console.WriteLine("Вы выбрали карты");
+            Console.WriteLine("\nВы выбрали карты");
             foreach(string card in cardsPlaer) 
             {
                 Console.WriteLine(card);
