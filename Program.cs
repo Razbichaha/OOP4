@@ -14,32 +14,25 @@ namespace OOP4
             DeckOfCards deckOfCards = new DeckOfCards();
             ShowDeckOfCards showDeckOfCards = new ShowDeckOfCards(deckOfCards.GetSufledDeckOfCards());
             Queue<string> deckUser = new Queue<string>();
+            Game game = new Game(deckUser);
 
             bool isContinueCycle = true;
 
             while (isContinueCycle)
             {
-                string card = showDeckOfCards.GiveACard();
+                string card = showDeckOfCards.GiveCard();
                 string userInput = Console.ReadLine();
 
                 switch (userInput)
                 {
                     case "еще":
-                        if (card == "_")
-                        {
-                            Console.Write("Колода выдана полностью ");
-                            isContinueCycle = false;
-                        }else
-                        {
-                            deckUser.Enqueue(card);
-                            Console.WriteLine(card);
-                        }
+
+                        isContinueCycle = game.IssuanceCard(card, deckUser);
+                        
                         break;
                     case "все":
-
-                        Game game = new Game(deckUser);
+                        
                         game.ShowCards();
-
 
                         break;
                     default:
@@ -52,24 +45,45 @@ namespace OOP4
         }
     }
 
+
+
     class Game
     {
-        private Queue<string> deckUser = new Queue<string>();
+        private Queue<string> _deckUser = new Queue<string>();
 
        public Game(Queue<string> deck)
         {
-            deckUser = deck;
+            _deckUser = deck;
         }
 
         public void ShowCards()
         {
             Menu menu = new Menu();
-            menu.OutputCardsPlayer(deckUser);
+            menu.OutputCardsPlayer(_deckUser);
 
             DeckOfCards deckOfCards = new DeckOfCards();
 
-            menu.OutputCardsPlayer(deckOfCards.EarndPoints(deckUser));
+            menu.OutputCardsPlayer(deckOfCards.EarndPoints(_deckUser));
         }
+
+        public bool IssuanceCard(string card, Queue<string> UserDeck)
+        {
+            bool isContinueCycle = true;
+
+            if (card == "_")
+            {
+                Console.Write("Колода выдана полностью ");
+                isContinueCycle = false;
+            }
+            else
+            {
+                UserDeck.Enqueue(card);
+                Console.WriteLine(card);
+            }
+
+            return isContinueCycle;
+        }
+
 
     }
 
@@ -105,9 +119,9 @@ namespace OOP4
 
     class DeckOfCards
     {
-        private List<string> deckList = new List<string>() { "6 трефа", "7 трефа", "8 трефа", "9 трефа", "10 трефа", "валет трефа",
+        private List<string> _deckList = new List<string>() { "6 трефа", "7 трефа", "8 трефа", "9 трефа", "10 трефа", "валет трефа",
                                                              "дама трефа", "король трефа", "туз трефа" };
-        private Dictionary<string, int> CardWeight = new Dictionary<string, int>
+        private Dictionary<string, int> _cardWeight = new Dictionary<string, int>
         {
             ["6 трефа"] = 6,
             ["7 трефа"] = 7,
@@ -120,18 +134,11 @@ namespace OOP4
             ["туз трефа"] = 11
         };
 
-        public List<string> _deckCards { get; }
-
-        public DeckOfCards()
-        {
-            _deckCards = deckList;
-        }
-
         public List<string> GetSufledDeckOfCards()
         {
-            string[] array = new string[deckList.Count];
+            string[] array = new string[_deckList.Count];
 
-            deckList.CopyTo(array);
+            _deckList.CopyTo(array);
 
             Random random = new Random();
 
@@ -157,7 +164,7 @@ namespace OOP4
             {
                 int temp;
 
-                    CardWeight.TryGetValue(cards.Dequeue(), out temp);
+                    _cardWeight.TryGetValue(cards.Dequeue(), out temp);
                 
                 sumCards += temp;
             }
@@ -167,20 +174,20 @@ namespace OOP4
 
     class ShowDeckOfCards
     {
-        private Queue<string> queueCards = new Queue<string>();
+        private Queue<string> _queueCards = new Queue<string>();
 
         public ShowDeckOfCards(List<string> cards)
         {
             Queue<string> temp = new Queue<string>(cards);
-            queueCards = temp;
+            _queueCards = temp;
         }
 
-        public string GiveACard()
+        public string GiveCard()
         {
             string temp = "_";
-            if (queueCards.Count > 0)
+            if (_queueCards.Count > 0)
             {
-                temp = queueCards.Dequeue();
+                temp = _queueCards.Dequeue();
             }
 
             return temp;
